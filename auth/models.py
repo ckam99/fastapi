@@ -1,5 +1,6 @@
 from tortoise.models import Model
 from tortoise import fields
+from passlib.hash import bcrypt
 
 
 class User(Model):
@@ -14,7 +15,7 @@ class User(Model):
         return cls.get(username=username)
 
     def verify_password(self, password):
-        return True
+        return bcrypt.verify(password, self.password)
 
     def set_password(self, password):
-        pass
+        self.password = bcrypt.hash(password)
