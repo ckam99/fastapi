@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from auth.urls import router as auth
 
+
 router = APIRouter()
 router.include_router(
     auth, prefix='/auth', tags=['auth'],

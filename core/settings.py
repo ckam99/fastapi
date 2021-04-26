@@ -23,6 +23,9 @@ DATABASE = {
     }
 }
 
+STATIC_DIR = 'static'
+MEDIA_DIR = 'media'
+
 
 # DATABASE = {
 #     "connections": {
