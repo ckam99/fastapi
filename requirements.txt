@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+tortoise-orm
+pyjwt
+aerich
+aiofiles
+passlib
+bcrypt
+python-multipart
+jinja2
+email-validator

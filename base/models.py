@@ -9,6 +9,7 @@ class User(Model):
     username = fields.CharField(50, unique=True)
     email = fields.CharField(255, unique=True)
     password = fields.CharField(255, null=True)
+    avatar = fields.CharField(255, null=True)
 
     @classmethod
     async def get_user(cls, username):
