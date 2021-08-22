@@ -3,8 +3,6 @@
 - Run app
 ```bash
 uvicorn core:app --reload 
-# or
-python main.py
 ```
 Go to [localhost:8000](http://localhost:8000)
 
