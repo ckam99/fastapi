@@ -1,4 +1,4 @@
-from os import path
+from fastapi import BackgroundTasks
 from core.contrib.security import OAuth, OAuth2PasswordRequestForm
 from .models import User
 from .schemas import RegisterSchema, UserSchema, LoginSchema, UserTokenSchema
@@ -8,10 +8,21 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi import APIRouter, Request
 from core.contrib import view
-from core.generics.medias import upload_multiple_files, get_media
+from core.contrib.medias import upload_multiple_files, get_media
+from core.contrib.mails import send_email_async, send_push_email
+
 
 router = APIRouter()
 oauth = OAuth()
+
+
+@router.get('/mail')
+def send_mail(background_task: BackgroundTasks):
+    context = {'title': 'Hello World', 'name': 'John Doe'}
+    receivers = ['someemail@gmail.com', 'dcdkl@sdkd.cf']
+    background_task.add_task(send_push_email, 'Hello World',
+                             body=context, to=receivers, template_name='mails/test.html')
+    return {'message': 'Success'}
 
 
 @router.get('/', include_in_schema=False)

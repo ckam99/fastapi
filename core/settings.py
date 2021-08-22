@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
+load_dotenv('.env')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,7 +16,7 @@ AUTH_URL = 'auth/login'
 
 ALLOWED_HOSTS = []
 
-TEMPLATE_FOLDER = BASE_DIR.joinpath('base/templates')
+TEMPLATE_FOLDER = 'base/templates'
 
 DATABASE = {
     "connections": {
@@ -62,3 +64,13 @@ MEDIA_DIR = 'media'
 #         }
 #     }
 # }
+
+MAIL_USERNAME = os.getenv('MAIL_USERNAME', '')
+MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '')
+MAIL_FROM = os.environ.get('MAIL_FROM', 'noreply@example.com')
+MAIL_PORT = os.environ.get('MAIL_PORT', 2525)
+MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.mailtrap.io')
+MAIL_FROM_NAME = os.environ.get('MAIL_FROM_NAME', 'FastAPI')
+MAIL_TLS = os.environ.get('MAIL_TLS', False)
+MAIL_SSL = os.environ.get('MAIL_SSL', False)
+USE_CREDENTIALS = os.environ.get('USE_CREDENTIALS', False)
