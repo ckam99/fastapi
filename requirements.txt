@@ -11,3 +11,4 @@ jinja2
 email-validator
 python-dotenv
 fastapi-mail
+asyncpg

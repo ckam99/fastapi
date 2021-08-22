@@ -7,13 +7,12 @@ from base.urls import router
 from . import settings
 
 
-app = FastAPI()
+app = FastAPI(title=settings.APP_NAME)
 app.mount('/static', StaticFiles(directory=settings.STATIC_DIR),
           name='static')
 register_tortoise(
     app,
-    db_url='sqlite://db.sqlite3',
-    modules={'models': ['base.models']},
+    config=settings.TORTOISE_ORM,
     generate_schemas=True,
     add_exception_handlers=True
 )

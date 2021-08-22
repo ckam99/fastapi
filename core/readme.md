@@ -4,7 +4,7 @@
 
 #### initiate migration
 
-`aerich init -t core.settings.DATABASE --location=./core/migrations`
+`aerich init -t core.settings.TORTOISE_ORM --location=./core/migrations`
 
 #### create initial migration
 
