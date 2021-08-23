@@ -8,6 +8,7 @@ class User(Model):
     name = fields.CharField(50, null=True)
     username = fields.CharField(50, unique=True)
     email = fields.CharField(255, unique=True)
+    phone = fields.CharField(25, null=True)
     password = fields.CharField(255, null=True)
     avatar = fields.CharField(255, null=True)
 

@@ -12,7 +12,7 @@ class UserBaseSchema(BaseModel):
 
 class UserSchema(UserBaseSchema):
     id: int
-    avatar: str
+    avatar: Optional[str]
 
 
 class UserTokenSchema(UserSchema):

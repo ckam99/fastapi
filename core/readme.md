@@ -4,7 +4,7 @@
 
 #### initiate migration
 
-`aerich init -t core.settings.TORTOISE_ORM --location=./core/migrations`
+`aerich init -t core.settings.TORTOISE_ORM --location=./core/database/migrations`
 
 #### create initial migration
 
@@ -12,7 +12,7 @@
 
 #### Update models and make migrate
 
-`aerich migrate --name drop_column`
+`aerich migrate --name [migration_name]`
 
 #### Upgrade to latest version
 

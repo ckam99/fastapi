@@ -1,18 +1,18 @@
-from fastapi import BackgroundTasks
+from base.views import AuthAPIView, UserAPIView
 from core.contrib.security import OAuth, OAuth2PasswordRequestForm
-from .models import User
-from .schemas import RegisterSchema, UserSchema, LoginSchema, UserTokenSchema
-from typing import List
-from tortoise.query_utils import Q
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import APIRouter, HTTPException, status, Depends
-from fastapi import APIRouter, Request
 from core.contrib import view
 from core.contrib.medias import upload_multiple_files, get_media
+from .schemas import RegisterSchema, UserSchema, LoginSchema, UserTokenSchema
+from typing import List
+from fastapi.security import OAuth2PasswordRequestForm
+from fastapi import APIRouter, Depends, Request
 
 
 router = APIRouter()
 oauth = OAuth()
+
+auth = AuthAPIView()
+users = UserAPIView()
 
 
 @router.get('/', include_in_schema=False)
@@ -22,42 +22,30 @@ def index(request: Request):
 
 @router.post(path='/auth/register',   response_model=UserSchema, tags=['Authentication'])
 async def register(payload: RegisterSchema):
-    obj = await User.filter(Q(email=payload.email) | Q(username=payload.username)).first()
-    if obj:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail='Email or username already exist')
-    user_obj = User(**payload.dict())
-    user_obj.set_password(payload.password)
-    await user_obj.save()
-    return user_obj
+    rep = await auth.register(payload)
+    return rep
 
 
 @router.post(path='/auth/login',  response_model=UserTokenSchema, tags=['Authentication'])
 async def login(payload: LoginSchema):
-    user = await oauth.authenticate(payload.email, payload.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail='Email or password incorrect.')
-    return oauth.generate_token(dict(user))
+    rep = await auth.login(payload)
+    return rep
 
 
 @router.post(path='/oauth/login',  summary="Oauth authentication", response_model=UserTokenSchema, tags=['Authentication'])
 async def oauth_login(payload: OAuth2PasswordRequestForm = Depends()):
-    user = await oauth.authenticate(payload.username, payload.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail='Email or password incorrect.')
-    return oauth.generate_token(dict(user))
+    rep = await auth.oauth_login(username=payload.username, password=payload.password)
+    return rep
 
 
 @router.get(path='/auth/me', summary="Get current user", response_model=UserSchema, tags=['Authentication'])
-async def get_user(user: UserSchema = Depends(oauth.get_current_user)):
+async def get_auth_user(user: UserSchema = Depends(oauth.get_current_user)):
     return user
 
 
 @router.get(path='/users', response_model=List[UserSchema], tags=['Users'])
 async def get_users():
-    return await User.all()
+    return await users.list()
 
 
 @router.get('/media/{path}', tags=['Medias'], summary="Get uploaded file")

@@ -54,7 +54,6 @@ TORTOISE_ORM = {
 STATIC_DIR = BASE_DIR.joinpath('base/static')
 MEDIA_DIR = 'media'
 
-
 MAIL_USERNAME = os.getenv('MAIL_USERNAME', '')
 MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD', '')
 MAIL_FROM = os.environ.get('MAIL_FROM', 'noreply@example.com')
