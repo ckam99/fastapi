@@ -1,9 +1,22 @@
-## FastAPI with OAuth2 authencation
+## Micro framework based on FastAPI
 
+#### Features
+- Json Web Token Authentication
+- Registration users
+- Password reset
+- Send mails
+- Background Tasks
+- Files uploading
+- Websockets
+- Using brokers(Redis)
+- Build for production using Docker
+
+#### How to use
 - Run app
 ```bash
 uvicorn core:app --reload 
 ```
+
 Go to [localhost:8000](http://localhost:8000)
 
 - Make database migrations
