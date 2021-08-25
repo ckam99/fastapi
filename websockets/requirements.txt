@@ -1,0 +1,16 @@
+aiofiles==0.7.0
+asgiref==3.4.1
+autopep8==1.5.7
+click==8.0.1
+colorama==0.4.4
+fastapi==0.68.1
+h11==0.12.0
+Jinja2==3.0.1
+MarkupSafe==2.0.1
+pycodestyle==2.7.0
+pydantic==1.8.2
+starlette==0.14.2
+toml==0.10.2
+typing-extensions==3.10.0.0
+uvicorn==0.15.0
+websockets==9.1

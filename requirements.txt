@@ -1,0 +1,7 @@
+aiofiles==0.7.0
+fastapi==0.68.1
+Jinja2==3.0.1
+MarkupSafe==2.0.1
+pydantic==1.8.2
+starlette==0.14.2
+typing-extensions==3.10.0.0
