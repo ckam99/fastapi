@@ -1,8 +1,8 @@
 from fastapi.exceptions import HTTPException
 from tortoise.query_utils import Q
 from starlette import status
-from .models import User
-from .schemas import LoginSchema, RegisterSchema
+from .models import User, Role
+from .schemas import (LoginSchema, RegisterSchema, RoleCredentialSchema)
 from core.contrib.security import OAuth
 
 oauth = OAuth()
@@ -42,3 +42,13 @@ class UserAPIView():
 
     def update(self, payload):
         pass
+
+
+class RoleAPIView():
+
+    async def list(self):
+        return await Role.all()
+
+    async def create(self, credentials: RoleCredentialSchema):
+        credentials.name = credentials.name.upper()
+        return await Role.create(**credentials.dict())

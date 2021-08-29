@@ -19,7 +19,7 @@ AUTH_URL = 'auth/login'
 
 ALLOWED_HOSTS = []
 
-TEMPLATE_FOLDER = 'base/templates'
+TEMPLATE_FOLDER = 'core/templates'
 
 DATABASES = {
     "postgresql": {
@@ -48,10 +48,12 @@ TORTOISE_ORM = {
             ],
             "default_connection": "default"
         }
-    }
+    },
+    "use_tz": False,
+    "timezone": "UTC",
 }
 
-STATIC_DIR = BASE_DIR.joinpath('base/static')
+STATIC_DIR = BASE_DIR.joinpath('core/static')
 MEDIA_DIR = 'media'
 
 MAIL_USERNAME = os.getenv('MAIL_USERNAME', '')

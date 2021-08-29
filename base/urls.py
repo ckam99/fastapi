@@ -1,18 +1,17 @@
-from base.views import AuthAPIView, UserAPIView
+from os import path
+from base.views import AuthAPIView, UserAPIView, RoleAPIView
 from core.contrib.security import OAuth, OAuth2PasswordRequestForm
 from core.contrib import view
 from core.contrib.medias import upload_multiple_files, get_media
-from .schemas import RegisterSchema, UserSchema, LoginSchema, UserTokenSchema
+from .schemas import RegisterSchema, RoleCredentialSchema, RoleSchema, UserSchema, LoginSchema, UserTokenSchema
 from typing import List
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import APIRouter, Depends, Request
+from fastapi import Depends, Request
+from . import router
 
-
-router = APIRouter()
 oauth = OAuth()
-
 auth = AuthAPIView()
 users = UserAPIView()
+roles = RoleAPIView()
 
 
 @router.get('/', include_in_schema=False)
@@ -48,11 +47,20 @@ async def get_users():
     return await users.list()
 
 
-@router.get('/media/{path}', tags=['Medias'], summary="Get uploaded file")
-async def get_file(*, path: str):
-    return await get_media(path)
+@router.get(path='/users/roles', response_model=List[RoleSchema], tags=['Users'])
+async def get_roles():
+    return await roles.list()
 
 
-@router.post('/media', tags=['Medias'], summary='Upload file')
-async def upload_file(files=Depends(upload_multiple_files)):
-    return {"message": "ashdka"}
+@router.post(path='/users/roles', response_model=RoleSchema, tags=['Users'])
+async def create_role(credentials: RoleCredentialSchema):
+    return await roles.create(credentials)
+
+# @router.get('/media/{path}', tags=['Medias'], summary="Get uploaded file")
+# async def get_file(*, path: str):
+#     return await get_media(path)
+
+
+# @router.post('/media', tags=['Medias'], summary='Upload file')
+# async def upload_file(files=Depends(upload_multiple_files)):
+#     return {"message": "ashdka"}
