@@ -13,7 +13,7 @@ app.mount('/static', StaticFiles(directory=settings.STATIC_DIR),
 register_tortoise(
     app,
     config=settings.TORTOISE_ORM,
-    generate_schemas=True,
+    generate_schemas=False,
     add_exception_handlers=True
 )
 app.include_router(router)

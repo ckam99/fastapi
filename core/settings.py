@@ -37,13 +37,13 @@ DATABASES = {
 
 TORTOISE_ORM = {
     "connections": {
-        "default": DATABASES['sqlite']
+        "default": DATABASES[os.environ.get('DB_ENGINE', 'sqlite')]
     },
     "apps": {
         "models": {
             "models": [
                 "base.models",
-                "polls.models",
+                # "polls.models",
                 "aerich.models"
             ],
             "default_connection": "default"

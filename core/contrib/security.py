@@ -13,6 +13,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
 class OAuth():
+
+    @staticmethod
     async def authenticate(self, username: str, password: str):
         user = await User.get_or_none(email=username)
         if not user:
@@ -21,6 +23,7 @@ class OAuth():
             return False
         return user
 
+    @staticmethod
     def generate_token(self, user_obj: dict):
         if 'password' in user_obj:
             del user_obj['password']
@@ -31,6 +34,7 @@ class OAuth():
         user_obj['token_type'] = 'bearer'
         return user_obj
 
+    @staticmethod
     async def get_current_user(self, token: str = Depends(oauth2_scheme)):
         try:
             decode_token = jwt.decode(

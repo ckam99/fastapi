@@ -24,7 +24,6 @@ async def signal_post_save(
 ) -> None:
     await send_confirmation_email(user=instance)
     # background_task.add_task(send_confirmation_email, instance)
-    print(sender, instance, using_db, created, update_fields)
 
 
 @pre_delete(User)
