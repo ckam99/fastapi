@@ -1,0 +1,16 @@
+fastapi==0.68.1
+uvicorn==0.15.0
+pyjwt==2.1.0
+aiofiles==0.7.0
+passlib==1.7.4
+bcrypt==3.2.0
+python-multipart==0.0.5
+jinja2==3.0.1
+email-validator==1.1.3
+python-dotenv==0.19.0
+fastapi-mail==0.4.1
+asyncpg==0.24.0
+celery==5.1.2
+flower==1.0.0
+sqlmodel
+alembic
