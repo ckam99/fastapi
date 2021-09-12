@@ -24,7 +24,6 @@ async def signal_post_save(
 ) -> None:
     if instance.email_confirmed_at is None:
         send_confirmation_email.delay(instance.email)
-        # create_task.delay(2, 4, 6)
     # background_task.add_task(send_confirmation_email, instance)
 
 

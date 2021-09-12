@@ -1,6 +1,8 @@
 from typing import Any, Dict, List
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
 from core import settings
+# from asgiref.sync import sync_to_async
+import asyncio
 
 conf = ConnectionConfig(
     MAIL_USERNAME=settings.MAIL_USERNAME,
@@ -16,14 +18,14 @@ conf = ConnectionConfig(
 )
 
 
-async def send_email_async(subject: str, body: Dict[str, Any], to: List[str], template_name=str):
+def send_email_async(subject: str, body: Dict[str, Any], to: List[str], template_name=str):
     message = MessageSchema(
         subject=subject,
         recipients=to,
         template_body=body,
     )
     fm = FastMail(conf)
-    await fm.send_message(message, template_name=template_name)
+    asyncio.run(fm.send_message(message, template_name=template_name))
 
 
 async def send_push_email(subject: str, body: Dict[str, Any], to: List[str], template_name=None):
