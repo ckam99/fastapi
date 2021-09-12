@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from tortoise.contrib.fastapi import register_tortoise
-from tortoise import Tortoise
+from tortoise import Tortoise, run_async
 import logging
 from base.urls import router
 from . import settings
@@ -10,6 +10,8 @@ from . import settings
 app = FastAPI(title=settings.APP_NAME)
 app.mount('/static', StaticFiles(directory=settings.STATIC_DIR),
           name='static')
+
+
 register_tortoise(
     app,
     config=settings.TORTOISE_ORM,

@@ -10,6 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = os.environ.get('DEBUG', True)
 
+TIMEZONE = 'UTC'
+
 SECRET_KEY = os.environ.get(
     'SECRET_KEY', '56c754aa365a357c7242b15f23b7187ac749a6ec28e9f2775c49b498c5d42825')
 ALGORITHM = "HS256"
@@ -22,6 +24,13 @@ ALLOWED_HOSTS = []
 TEMPLATE_FOLDER = 'resource/templates'
 
 DATABASES = {
+    # 'postgresql': "postgres://{}:{}@{}:{}/{}".format(
+    #     os.environ.get('DB_USER'),
+    #     os.environ.get('DB_PASSWORD'),
+    #     os.environ.get('DB_HOST', 'localhost'),
+    #     os.environ.get('DB_PORT'),
+    #     os.environ.get('DB_NAME')
+    # ),
     "postgresql": {
         "engine": "tortoise.backends.asyncpg",
         "credentials": {
@@ -31,6 +40,7 @@ DATABASES = {
             "user": os.environ.get('DB_USER', 'postgres'),
             "password": os.environ.get('DB_PASSWORD', ''),
         }
+
     },
     "sqlite": "sqlite://db.sqlite3"
 }
@@ -50,7 +60,7 @@ TORTOISE_ORM = {
         }
     },
     "use_tz": False,
-    "timezone": "UTC",
+    "timezone": TIMEZONE,
 }
 
 STATIC_DIR = BASE_DIR.joinpath('resource/static')
@@ -65,3 +75,10 @@ MAIL_FROM_NAME = os.environ.get('MAIL_FROM_NAME', 'FastAPI')
 MAIL_TLS = os.environ.get('MAIL_TLS', False)
 MAIL_SSL = os.environ.get('MAIL_SSL', False)
 USE_CREDENTIALS = os.environ.get('USE_CREDENTIALS', False)
+
+
+# Celery and redis settings
+CELERY_BROKER_URL = os.environ.get(
+    'CELERY_BROKER_URL', 'redis://127.0.0.1:6379')
+CELERY_RESULT_BACKEND = os.environ.get(
+    'CELERY_RESULT_BACKEND', 'redis://127.0.0.1:6379')

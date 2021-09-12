@@ -4,53 +4,37 @@ services:
 
   db:
     container_name: pgsql
-    image: postgres
+    image: postgres:12
     restart: always
-    ports:
-      - 5432:5432
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - db-data:/var/lib/postgresql/data/
   app:
     container_name: app
-    build: .
-    command: bash -c "aerich upgrade && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
-    volumes:
-      - .:/app
-    ports:
-      - 8000:8000
-    restart: always
+    <<: &app
+      build: .
+      command: bash -c "aerich upgrade && python run.py"
+      volumes:
+        - .:/app
+      restart: always
+      depends_on:
+        - db
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+  celery:
+    <<: *app
+    command: celery -A core.celery worker --loglevel=info
     depends_on:
-      - db
+      - redis
+  flower:
+    <<: *app
+    command: celery -A core.celery flower --port=5555
+    depends_on:
+      - redis
 
-  # redis:
-  #   container_name: redis
-  #   image: redis:6.2-alpine
-
-  # celery_worker:
-  #   container_name: celery_worker
-  #   build: .
-  #   command: celery -A celery_worker.celery worker --loglevel=info
-  #   volumes:
-  #     - .:/app
-  #   environment:
-  #     - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-  #     - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-  #   depends_on:
-  #     - app
-  #     - redis
-
-  # flower:
-  #   container_name: flower
-  #   build: .
-  #   command: celery -A celery_worker.celery flower --port=5555
-  #   ports:
-  #     - 5556:5555
-  #   environment:
-  #     - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-  #     - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
-  #   depends_on:
-  #     - app
-  #     - redis
-  #     - celery_worker
+volumes: 
+   db-data:

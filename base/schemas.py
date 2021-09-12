@@ -19,6 +19,7 @@ class UserSchema(UserBaseSchema):
 class UserTokenSchema(UserSchema):
     access_token: str
     token_type: Optional[str]
+    token_expire_at: Optional[datetime]
 
 
 class RegisterSchema(UserBaseSchema):
@@ -40,3 +41,8 @@ class RoleSchema(BaseModel):
     name: str
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
+
+
+class ConfirmEmailSchema(BaseModel):
+    code: str
+    email: EmailStr
