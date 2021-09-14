@@ -10,7 +10,7 @@
 
 #### Features
 - Json Web Token Authentication
-- Registration and Authentication
+- Basic Authentication
 - Emails sending
 - Background Tasks
 - Files uploading
