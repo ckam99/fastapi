@@ -2,6 +2,7 @@
 #### Dependencies
 - Uvicorn
 - Celery
+- Flower
 - Redis
 - Postgresql
 - Nginx
