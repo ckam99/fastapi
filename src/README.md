@@ -1,23 +1,28 @@
 ## Micro framework based on FastAPI
+#### Dependencies
+- Uvicorn
+- Celery
+- Redis
+- Postgresql
+- Nginx
+- PyTest
+- Docker
 
 #### Features
 - Json Web Token Authentication
-- Registration users
-- Password reset
-- Send mails
+- Registration and Authentication
+- Emails sending
 - Background Tasks
 - Files uploading
 - Websockets
-- Using brokers(Redis)
-- Build for production using Docker
-- Celery
-- Flower
+- Queue messagings
 - Unit tests
+- Cli commands
 
 #### How to use
 - Run app
 ```bash
-uvicorn core:app --reload 
+python manage.py serve
 ```
 
 Go to [localhost:8000](http://localhost:8000)
