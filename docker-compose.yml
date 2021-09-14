@@ -20,7 +20,7 @@ services:
       build: src
       command: bash -c "aerich upgrade && python manage.py serve"
       volumes:
-        - ./src:/app
+        - ./src:/usr/src/app
       restart: always
       depends_on:
         - db
