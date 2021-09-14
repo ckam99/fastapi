@@ -52,7 +52,7 @@ TORTOISE_ORM = {
     "apps": {
         "models": {
             "models": [
-                "base.models",
+                "apps.base.models",
                 # "polls.models",
                 "aerich.models"
             ],
@@ -82,3 +82,6 @@ CELERY_BROKER_URL = os.environ.get(
     'CELERY_BROKER_URL', 'redis://127.0.0.1:6379')
 CELERY_RESULT_BACKEND = os.environ.get(
     'CELERY_RESULT_BACKEND', 'redis://127.0.0.1:6379')
+CELERY_TASKS_REGISTER = [
+    'apps.base.tasks'
+]

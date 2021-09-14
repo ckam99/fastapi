@@ -4,7 +4,6 @@
 __pycache__/ 
 media/
 node_modules/
-staticfiles/
 .DS_Store
 .virtualenv
 db.sqlite3

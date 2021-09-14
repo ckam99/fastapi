@@ -1,4 +1,4 @@
-from base.models import ConfirmAction
+from apps.base.models import ConfirmAction
 import random
 import uuid
 # from asgiref.sync import sync_to_async

@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from tortoise.contrib.fastapi import register_tortoise
 from tortoise import Tortoise, run_async
 import logging
-from base.urls import router
+from apps.urls import router
 from . import settings
 
 
