@@ -4,3 +4,4 @@
 .virtualenv
 .venv
 .env
+.pytest_cache
