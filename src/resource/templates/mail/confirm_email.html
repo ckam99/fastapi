@@ -1,0 +1,8 @@
+{% extends 'mail/base.html' %}
+
+{% block content %}
+<div style="padding: 30px 0;">
+    Welcome, {{ email }}!<br /><br />
+    code: <b>{{ code }}</b>
+</div>
+{% endblock %}
