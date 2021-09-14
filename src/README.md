@@ -10,6 +10,9 @@
 - Websockets
 - Using brokers(Redis)
 - Build for production using Docker
+- Celery
+- Flower
+- Unit tests
 
 #### How to use
 - Run app

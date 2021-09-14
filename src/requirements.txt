@@ -14,4 +14,3 @@ fastapi-mail==0.4.1
 asyncpg==0.24.0
 celery==5.1.2
 flower==1.0.0
-# celery-pool-asyncio==0.2.0
