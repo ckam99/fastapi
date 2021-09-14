@@ -1,0 +1,262 @@
+import asyncio
+import os
+from configparser import ConfigParser
+from functools import wraps
+from pathlib import Path
+from typing import List
+
+import click
+from click import Context, UsageError
+from tortoise import Tortoise
+
+from aerich.exceptions import DowngradeError
+from aerich.utils import add_src_path, get_tortoise_config
+
+from . import Command
+from .enums import Color
+from .version import __version__
+
+parser = ConfigParser()
+
+CONFIG_DEFAULT_VALUES = {
+    "src_folder": ".",
+}
+
+
+def coro(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        loop = asyncio.get_event_loop()
+
+        # Close db connections at the end of all all but the cli group function
+        try:
+            loop.run_until_complete(f(*args, **kwargs))
+        finally:
+            if f.__name__ != "cli":
+                loop.run_until_complete(Tortoise.close_connections())
+
+    return wrapper
+
+
+@click.group(context_settings={"help_option_names": ["-h", "--help"]})
+@click.version_option(__version__, "-V", "--version")
+@click.option(
+    "-c",
+    "--config",
+    default="aerich.ini",
+    show_default=True,
+    help="Config file.",
+)
+@click.option("--app", required=False, help="Tortoise-ORM app name.")
+@click.option(
+    "-n",
+    "--name",
+    default="aerich",
+    show_default=True,
+    help="Name of section in .ini file to use for aerich config.",
+)
+@click.pass_context
+@coro
+async def cli(ctx: Context, config, app, name):
+    ctx.ensure_object(dict)
+    ctx.obj["config_file"] = config
+    ctx.obj["name"] = name
+
+    invoked_subcommand = ctx.invoked_subcommand
+    if invoked_subcommand != "init":
+        if not Path(config).exists():
+            raise UsageError("You must exec init first", ctx=ctx)
+        parser.read(config)
+
+        location = parser[name]["location"]
+        tortoise_orm = parser[name]["tortoise_orm"]
+        src_folder = parser[name].get("src_folder", CONFIG_DEFAULT_VALUES["src_folder"])
+        add_src_path(src_folder)
+        tortoise_config = get_tortoise_config(ctx, tortoise_orm)
+        app = app or list(tortoise_config.get("apps").keys())[0]
+        command = Command(tortoise_config=tortoise_config, app=app, location=location)
+        ctx.obj["command"] = command
+        if invoked_subcommand != "init-db":
+            if not Path(location, app).exists():
+                raise UsageError("You must exec init-db first", ctx=ctx)
+            await command.init()
+
+
+@cli.command(help="Generate migrate changes file.")
+@click.option("--name", default="update", show_default=True, help="Migrate name.")
+@click.pass_context
+@coro
+async def migrate(ctx: Context, name):
+    command = ctx.obj["command"]
+    ret = await command.migrate(name)
+    if not ret:
+        return click.secho("No changes detected", fg=Color.yellow)
+    click.secho(f"Success migrate {ret}", fg=Color.green)
+
+
+@cli.command(help="Upgrade to specified version.")
+@click.pass_context
+@coro
+async def upgrade(ctx: Context):
+    command = ctx.obj["command"]
+    migrated = await command.upgrade()
+    if not migrated:
+        click.secho("No upgrade items found", fg=Color.yellow)
+    else:
+        for version_file in migrated:
+            click.secho(f"Success upgrade {version_file}", fg=Color.green)
+
+
+@cli.command(help="Downgrade to specified version.")
+@click.option(
+    "-v",
+    "--version",
+    default=-1,
+    type=int,
+    show_default=True,
+    help="Specified version, default to last.",
+)
+@click.option(
+    "-d",
+    "--delete",
+    is_flag=True,
+    default=False,
+    show_default=True,
+    help="Delete version files at the same time.",
+)
+@click.pass_context
+@click.confirmation_option(
+    prompt="Downgrade is dangerous, which maybe lose your data, are you sure?",
+)
+@coro
+async def downgrade(ctx: Context, version: int, delete: bool):
+    command = ctx.obj["command"]
+    try:
+        files = await command.downgrade(version, delete)
+    except DowngradeError as e:
+        return click.secho(str(e), fg=Color.yellow)
+    for file in files:
+        click.secho(f"Success downgrade {file}", fg=Color.green)
+
+
+@cli.command(help="Show current available heads in migrate location.")
+@click.pass_context
+@coro
+async def heads(ctx: Context):
+    command = ctx.obj["command"]
+    head_list = await command.heads()
+    if not head_list:
+        return click.secho("No available heads, try migrate first", fg=Color.green)
+    for version in head_list:
+        click.secho(version, fg=Color.green)
+
+
+@cli.command(help="List all migrate items.")
+@click.pass_context
+@coro
+async def history(ctx: Context):
+    command = ctx.obj["command"]
+    versions = await command.history()
+    if not versions:
+        return click.secho("No history, try migrate", fg=Color.green)
+    for version in versions:
+        click.secho(version, fg=Color.green)
+
+
+@cli.command(help="Init config file and generate root migrate location.")
+@click.option(
+    "-t",
+    "--tortoise-orm",
+    required=True,
+    help="Tortoise-ORM config module dict variable, like settings.TORTOISE_ORM.",
+)
+@click.option(
+    "--location",
+    default="./migrations",
+    show_default=True,
+    help="Migrate store location.",
+)
+@click.option(
+    "-s",
+    "--src_folder",
+    default=CONFIG_DEFAULT_VALUES["src_folder"],
+    show_default=False,
+    help="Folder of the source, relative to the project root.",
+)
+@click.pass_context
+@coro
+async def init(ctx: Context, tortoise_orm, location, src_folder):
+    config_file = ctx.obj["config_file"]
+    name = ctx.obj["name"]
+    if Path(config_file).exists():
+        return click.secho("Configuration file already created", fg=Color.yellow)
+
+    if os.path.isabs(src_folder):
+        src_folder = os.path.relpath(os.getcwd(), src_folder)
+    # Add ./ so it's clear that this is relative path
+    if not src_folder.startswith("./"):
+        src_folder = "./" + src_folder
+
+    # check that we can find the configuration, if not we can fail before the config file gets created
+    add_src_path(src_folder)
+    get_tortoise_config(ctx, tortoise_orm)
+
+    parser.add_section(name)
+    parser.set(name, "tortoise_orm", tortoise_orm)
+    parser.set(name, "location", location)
+    parser.set(name, "src_folder", src_folder)
+
+    with open(config_file, "w", encoding="utf-8") as f:
+        parser.write(f)
+
+    Path(location).mkdir(parents=True, exist_ok=True)
+
+    click.secho(f"Success create migrate location {location}", fg=Color.green)
+    click.secho(f"Success generate config file {config_file}", fg=Color.green)
+
+
+@cli.command(help="Generate schema and generate app migrate location.")
+@click.option(
+    "--safe",
+    type=bool,
+    default=True,
+    help="When set to true, creates the table only when it does not already exist.",
+    show_default=True,
+)
+@click.pass_context
+@coro
+async def init_db(ctx: Context, safe):
+    command = ctx.obj["command"]
+    app = command.app
+    dirname = Path(command.location, app)
+    try:
+        await command.init_db(safe)
+        click.secho(f"Success create app migrate location {dirname}", fg=Color.green)
+        click.secho(f'Success generate schema for app "{app}"', fg=Color.green)
+    except FileExistsError:
+        return click.secho(
+            f"Inited {app} already, or delete {dirname} and try again.", fg=Color.yellow
+        )
+
+
+@cli.command(help="Introspects the database tables to standard output as TortoiseORM model.")
+@click.option(
+    "-t",
+    "--table",
+    help="Which tables to inspect.",
+    multiple=True,
+    required=False,
+)
+@click.pass_context
+@coro
+async def inspectdb(ctx: Context, table: List[str]):
+    command = ctx.obj["command"]
+    await command.inspectdb(table)
+
+
+def main():
+    cli()
+
+
+if __name__ == "__main__":
+    main()

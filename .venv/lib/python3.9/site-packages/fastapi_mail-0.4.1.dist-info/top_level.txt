@@ -1,0 +1,3 @@
+examples
+fastapi_mail
+tests

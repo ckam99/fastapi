@@ -12,13 +12,15 @@ services:
       - POSTGRES_DB=${DB_NAME}
     volumes:
       - db-data:/var/lib/postgresql/data/
+    env_file: 
+      - ./src/.env
   app:
     container_name: app
     <<: &app
-      build: .
-      command: bash -c "aerich upgrade && python run.py"
+      build: src
+      command: bash -c "aerich upgrade && python manage.py serve"
       volumes:
-        - .:/app
+        - ./src:/app
       restart: always
       depends_on:
         - db
@@ -26,11 +28,13 @@ services:
     container_name: redis
     image: redis:6.2-alpine
   celery:
+    container_name: celery
     <<: *app
     command: celery -A core.celery worker --loglevel=info
     depends_on:
       - redis
   flower:
+    container_name: flower
     <<: *app
     command: celery -A core.celery flower --port=5555
     depends_on:

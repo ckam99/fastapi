@@ -1,0 +1,1 @@
+https://github.com/cole/aiosmtplib/archive/e8e5ea5acb959f374909dd7961fab865473dbc80.zip#egg=aiosmtplib-1.1.4+gite8e5ea5
