@@ -8,3 +8,8 @@ router.include_router(base_urls)
 #     auth_urls,
 #     responses={404: {"description": "Not found"}},
 # )
+
+
+@router.get('/hello')
+def say_hello():
+    return {'message': 'Hello everybody!'}
