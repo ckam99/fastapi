@@ -23,11 +23,9 @@ class User(models.Model):
 
 
 class Post(models.Model):
-    id=fields.IntField(pk=True)
-    title=fields.CharField(max_length=255)
-    body=fields.TextField(null=True)
+    id = fields.IntField(pk=True)
+    title = fields.CharField(max_length=255)
+    body = fields.TextField(null=True)
     created_at = fields.DatetimeField(auto_now_add=True)
     modified_at = fields.DatetimeField(auto_now=True)
-    user=fields.ForeignKeyField('models.User', on_delete=fields.CASCADE)
-    
-
+    user = fields.ForeignKeyField('models.User', on_delete=fields.CASCADE)

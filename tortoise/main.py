@@ -1,29 +1,43 @@
-from fastapi import FastAPI
-from models import User,Post
+from fastapi import FastAPI, Depends
+from models import User, Post
 from database import connect_db
-from schemas import UserInSchema,PostBaseSchema, UserSchema, PostSchema
+import schemas
 from typing import List
+from views import PostAPIView, UserAPIView
 
-app=FastAPI()
+app = FastAPI()
 
-@app.get('/users', response_model=List[UserSchema])
-async def get_users():
-    return await User.all()
 
-@app.post("/users", response_model=UserSchema)
-async def create_user(payload:UserInSchema):
-    user = User(**payload.dict())
-    await user.save()
-    return user
+@app.get('/users',  response_model=List[schemas.UserSchema], tags=['Users'])
+async def get_users(repo: UserAPIView = Depends(UserAPIView)):
+    return await repo.all()
 
-@app.get('/posts', response_model=List[PostSchema])
-async def get_posts():
-    return await Post.all()
 
-@app.post("/posts", response_model=PostSchema)
-async def create_post(payload:PostBaseSchema):
-    post = Post(**payload.dict())
-    await post.save()
-    return post
+@app.post("/users", response_model=schemas.UserSchema, tags=['Users'])
+async def create_user(payload: schemas.UserInSchema, repo: UserAPIView = Depends(UserAPIView)):
+    return await repo.create(payload)
 
-connect_db(app)
+
+@app.get("/users/{user_id}", response_model=schemas.UserSchema, tags=['Users'])
+async def get_user(user_id: int, repo: UserAPIView = Depends(UserAPIView)):
+    return await repo.find(user_id)
+
+
+@app.get('/posts', response_model=List[schemas.PostSchema], tags=['Posts'])
+async def get_posts(repo: PostAPIView = Depends(PostAPIView)):
+    return await repo.all()
+
+
+@app.post("/posts", response_model=schemas.PostBaseSchema, tags=['Posts'])
+async def create_post(payload: schemas.PostInSchema, repo: PostAPIView = Depends(PostAPIView)):
+    return await repo.create(payload)
+
+
+@app.get("/posts/{post_id}", response_model=schemas.PostSchema, tags=['Posts'])
+async def get_post(post_id: int, repo: PostAPIView = Depends(PostAPIView)):
+    return await repo.find(post_id)
+
+
+@app.on_event('startup')
+def on_start():
+    connect_db(app)
