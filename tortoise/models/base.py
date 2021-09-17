@@ -1,5 +1,4 @@
 from tortoise import fields, models
-from tortoise.contrib.pydantic import pydantic_model_creator
 
 
 class User(models.Model):
@@ -28,4 +27,5 @@ class Post(models.Model):
     body = fields.TextField(null=True)
     created_at = fields.DatetimeField(auto_now_add=True)
     modified_at = fields.DatetimeField(auto_now=True)
-    user = fields.ForeignKeyField('models.User', on_delete=fields.CASCADE)
+    user = fields.ForeignKeyField(
+        'models.User', related_name='posts', on_delete=fields.CASCADE)

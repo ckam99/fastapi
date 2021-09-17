@@ -1,7 +1,8 @@
 
 from tortoise.contrib.pydantic import pydantic_model_creator
-import schemas
-from models import Post, User
+from schemas.posts import PostInSchema
+from schemas.users import UserInSchema
+from models.base import Post, User
 
 
 class UserAPIView():
@@ -10,23 +11,27 @@ class UserAPIView():
     async def all(self):
         return await self.serializer.from_queryset(User.all())
 
-    async def create(self, payload: schemas.UserInSchema):
+    async def create(self, payload: UserInSchema):
         user = await User.create(**payload.dict(exclude_unset=True))
         return self.serializer.from_orm(user)
 
     async def find(self, user_id: int):
-        return await self.serializer.from_queryset_single(User.get(id=user_id))
+        user = await User.get(id=user_id).prefetch_related('posts')
+        data = user.__dict__
+        data['posts'] = await user.posts
+        return data
+
+    async def get_posts(self, user_id: int):
+        posts = await Post.filter(user_id=user_id).all()
+        return posts
 
 
 class PostAPIView():
-
-    serializer = pydantic_model_creator(Post)
-
     async def all(self):
         posts = await Post.all().prefetch_related('user')
         return posts
 
-    async def create(self, payload: schemas.PostInSchema):
+    async def create(self, payload: PostInSchema):
         post_obj = await Post.create(**payload.dict(exclude_unset=True))
         return post_obj
 
