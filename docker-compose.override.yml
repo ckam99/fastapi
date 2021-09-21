@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  db:
+    ports:
+      - 5432:5432
+  app:
+    ports:
+      - 8000:8000
+  flower:
+    ports:
+      - 5555:5555
+

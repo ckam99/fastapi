@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+*.pyc
+__pycache__/ 
+media/
+node_modules/
+.DS_Store
+.virtualenv
+db.sqlite3
+db.sqlite3-journal
+db.sqlite3-shm
+db.sqlite3-wal
+.venv
+.env
+.pytest_cache
