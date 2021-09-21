@@ -3,7 +3,7 @@ from tortoise.query_utils import Q
 from starlette import status
 from .models import User, Role, ConfirmAction
 from .schemas import (LoginSchema, RegisterSchema, RoleCredentialSchema)
-from core.contrib.security import OAuth
+from core.security import OAuth
 from datetime import datetime
 from typing import List
 

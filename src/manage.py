@@ -1,4 +1,4 @@
-from core.contrib.cli import commands
+from core.generic.cli import commands
 
 if __name__ == '__main__':
     commands()

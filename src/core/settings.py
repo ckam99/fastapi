@@ -63,6 +63,8 @@ TORTOISE_ORM = {
     "timezone": TIMEZONE,
 }
 
+DATABASE_GENERATE_SCHEMAS = True
+
 STATIC_DIR = BASE_DIR.joinpath('resource/static')
 MEDIA_DIR = 'media'
 

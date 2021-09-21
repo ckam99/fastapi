@@ -1,8 +1,8 @@
 from os import path
 from .services import AuthService, UserService, RoleService
-from core.contrib.security import OAuth, OAuth2PasswordRequestForm
-from core.contrib import view
-from core.contrib.medias import upload_multiple_files, get_media
+from core.security import OAuth, OAuth2PasswordRequestForm
+from core.generic import view
+from core.generic.medias import upload_multiple_files, get_media
 from .schemas import (RegisterSchema, RoleCredentialSchema, RoleSchema,
                       UserSchema, LoginSchema, UserTokenSchema, ConfirmEmailSchema)
 from typing import List

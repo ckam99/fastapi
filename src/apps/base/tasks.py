@@ -1,6 +1,6 @@
 
 from .models import User
-from core.contrib.mails import send_email_async
+from core.generic.mails import send_email_async
 from core.database.helpers import unique_code
 from celery import shared_task
 

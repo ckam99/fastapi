@@ -1,4 +1,4 @@
-from apps.base.models import ConfirmAction
+from apps.base.models import ConfirmAction, User
 import random
 import uuid
 # from asgiref.sync import sync_to_async
@@ -11,3 +11,13 @@ def unique_code(as_token=True):
     # if is_exist > 0:
     #     return unique_code(as_token)
     return code
+
+
+async def email_exists(email: str):
+    cn = await User.filter(email=email).count()
+    return cn > 0
+
+
+async def phone_exists(phone: str):
+    cn = await User.filter(phone=phone).count()
+    return cn > 0

@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from tortoise.contrib.fastapi import register_tortoise
-from tortoise import Tortoise, run_async
-import logging
+from core.database.core import connect_db, Tortoise
+from core.middlewares import register_cors
 from apps.urls import router
 from . import settings
 
@@ -11,20 +10,13 @@ app = FastAPI(title=settings.APP_NAME)
 app.mount('/static', StaticFiles(directory=settings.STATIC_DIR),
           name='static')
 
-
-register_tortoise(
-    app,
-    config=settings.TORTOISE_ORM,
-    generate_schemas=True,
-    add_exception_handlers=True
-)
 app.include_router(router)
 
 
 @app.on_event('startup')
 async def onstartup():
-    logging.info('Tortoise-ORM started, %s, %s',
-                 Tortoise._connections, Tortoise.apps)
+    await connect_db(app)
+    register_cors(app)
 
 
 @app.on_event('shutdown')

@@ -1,7 +1,17 @@
 from tortoise.models import Model
 from tortoise.contrib.pydantic import pydantic_model_creator, PydanticModel
 from tortoise.query_utils import Q
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
+from fastapi.templating import Jinja2Templates
+from core.settings import TEMPLATE_FOLDER
+
+template = Jinja2Templates(directory=TEMPLATE_FOLDER)
+
+
+def render(request: Request, template_name: str, context: dict = None, ):
+    context = {} if context is None else context
+    context['request'] = request
+    return template.TemplateResponse(template_name, context)
 
 
 class BaseView():
