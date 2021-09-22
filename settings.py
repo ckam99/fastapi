@@ -10,6 +10,11 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes
 
 TIMEZONE = 'Europe/Moscow'
 
+ALLOWED_HOSTS = [
+    "http://localhost",
+    "http://localhost:8080",
+]
+
 # DATABASE_URL = 'sqlite://db.sqlite3'
 DATABASE_URL = "postgres://{}:{}@{}:{}/{}".format(
     os.environ.get('DB_USER'),

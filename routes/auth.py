@@ -2,19 +2,20 @@ from views.auth import AuthAPIView
 from core.security import OAuth, OAuth2PasswordRequestForm
 from schemas.auth import (
     RegisterSchema,
-    RoleSchema,
     UserSchema,
     LoginSchema,
     UserTokenSchema,
     ConfirmEmailSchema
 )
 from fastapi import Depends, APIRouter
+from core.validators import UserValidator
 
 router = APIRouter(prefix='/auth')
 
 
 @router.post(path='/register',   response_model=UserSchema, tags=['Authentication'])
-async def register(credentials: RegisterSchema, repo: AuthAPIView = Depends()):
+async def register(credentials: RegisterSchema, repo: AuthAPIView = Depends(), validator: UserValidator = Depends()):
+    await validator.validate_unique_fields(**credentials.dict())
     return await repo.register(credentials)
 
 

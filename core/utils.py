@@ -1,18 +1,6 @@
 import os
-from models.auth import User
-from asgiref.sync import sync_to_async
-
-
-@sync_to_async
-def email_exists(email: str):
-    cn = User.filter(email=email).count()
-    return cn > 0
-
-
-@sync_to_async
-def phone_exists(phone: str):
-    cn = User.filter(phone=phone).count()
-    return cn > 0
+from core.schemas import ValidationSchema
+# from asgiref.sync import sync_to_async
 
 
 def load_models():
@@ -26,8 +14,6 @@ def load_tasks():
         'models') if x.is_file() and x.name.endswith('.py')]
     return files
 
-# from asgiref.sync import sync_to_async
-
 
 def unique_code(as_token=True):
     import random
@@ -38,3 +24,9 @@ def unique_code(as_token=True):
     # if is_exist > 0:
     #     return unique_code(as_token)
     return code
+
+
+def format_validation_errors(errors):
+    err = [ValidationSchema(
+        field=e['loc'][-1], type=e['type'], msg=e['msg']).dict() for e in errors]
+    return err

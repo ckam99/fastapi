@@ -1,5 +1,5 @@
-from fastapi.exceptions import HTTPException
-from tortoise.query_utils import Q
+from fastapi import HTTPException
+
 from starlette import status
 from models.auth import User, Role, Attempt
 from schemas.auth import (LoginSchema, RegisterSchema, RoleInSchema)
@@ -11,10 +11,7 @@ from typing import List
 class AuthAPIView():
 
     async def register(self, payload: RegisterSchema) -> User:
-        obj = await User.filter(Q(email=payload.email) | Q(username=payload.username)).first()
-        if obj:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail='Email or username already exist')
+
         user_obj = User(**payload.dict())
         user_obj.set_password(payload.password)
         await user_obj.save()

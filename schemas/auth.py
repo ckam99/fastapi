@@ -1,17 +1,16 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, validator, ValidationError
 from typing import Optional
 # from fastapi import UploadFile, File
-from core.exceptions import ValidationException
 from datetime import datetime
-from core.utils import email_exists, phone_exists
-from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+from core.schemas import ValidationSchema
 
 
 class UserBaseSchema(BaseModel):
     lastname:  Optional[str]
     firstname:  Optional[str]
-    username: str
-    email: EmailStr
+    username: int
+    email: int
     phone: Optional[str]
 
 
@@ -23,24 +22,10 @@ class RegisterSchema(UserBaseSchema):
     @classmethod
     def validate_password(cls, value):
         if len(value) < 4:
-            raise HTTPException(422, 'Password must be at least 4 characters')
-        return value
-
-    @validator('email')
-    @classmethod
-    def validate_email(cls, value):
-        exist = email_exists(value)
-        print('exist email=', exist)
-        if exist:
-            raise HTTPException(422, 'Email is not available')
-        return value
-
-    @validator('phone')
-    @classmethod
-    def validate_phone(cls, value):
-        if value is not None and phone_exists(value):
-            print('exist phone=', True)
-            raise HTTPException(422, 'Phone is not available')
+            raise JSONResponse(
+                status_code=422,
+                content={'errors': ValidationSchema(
+                    field='password', type='type_error', msg='Password must be at least 4 characters')})
         return value
 
 
