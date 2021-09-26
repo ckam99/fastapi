@@ -18,7 +18,6 @@ services:
     container_name: app
     <<: &app
       build: .
-      command: bash -c "aerich upgrade && python manage.py serve"
       volumes:
         - ./:/usr/src/app
       restart: always

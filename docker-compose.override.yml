@@ -5,6 +5,7 @@ services:
     ports:
       - 5432:5432
   app:
+    command: bash -c "aerich upgrade && python manage.py serve"
     ports:
       - 8000:8000
   flower:
