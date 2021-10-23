@@ -16,7 +16,3 @@ RUN set -eux \
 
 COPY . /app
 
-EXPOSE 3000
-
-CMD [ "uvicorn", "main:app", "--reload", "--host=0.0.0.0", "--port=3000" ]
-

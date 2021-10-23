@@ -2,6 +2,7 @@ from models import Post, User
 from typing import List
 from fastapi import HTTPException
 import schemas
+import producer
 
 
 class UserService():
@@ -12,6 +13,8 @@ class UserService():
 
     async def createUser(self, payload: schemas.User) -> User:
         user = await User.create(**payload.dict())
+        producer.publish(
+            'USER_CREATED', user.__dict__, ['django', 'fastapi'])
         return user
 
     async def findUserById(self, user_id: int) -> User:
@@ -30,6 +33,8 @@ class PostService():
 
     async def createPost(self, payload: schemas.Post) -> Post:
         post = await Post.create(**payload.dict())
+        producer.publish(
+            'POST_CREATED', post.__dict__, ['django'])
         return post
 
     async def findPostById(self, post_id: int) -> Post:
@@ -42,8 +47,12 @@ class PostService():
     async def updatePost(self, post_id: int, payload: schemas.Post) -> Post:
         post = await self.findPostById(post_id)
         post = await post.update_from_dict(payload.dict())
+        producer.publish(
+            'POST_UPDATED', post.__dict__, ['django'])
         return post
 
     async def removePost(self, post_id: int):
         post = await self.findPostById(post_id)
         await post.delete()
+        producer.publish(
+            'POST_DELETED', post.__dict__, ['django'])

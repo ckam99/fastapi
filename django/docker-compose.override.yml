@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+
+  db:
+    ports:
+      - 33061:3306
+
+  app:
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+      
+
+  # rabbitmq:
+  #   ports:
+  #     - 15672:15672
+  #     - 56721:5672

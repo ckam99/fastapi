@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: djangodb
+      MYSQL_USER: django
+      MYSQL_PASSWORD: django
+      MYSQL_ROOT_PASSWORD: django
+    volumes:
+      - db-data-django:/var/lib/mysql
+
+  app:
+    <<: &django
+      build: .
+      volumes:
+        - ./:/app
+      restart: always
+      depends_on:
+        - db
+      
+  queue:
+    <<: *django
+    command: python -u consumer.py
+
+
+volumes:
+  db-data-django:

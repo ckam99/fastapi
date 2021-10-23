@@ -7,6 +7,18 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+    def create(self, validated_data):
+
+        is_developer = validated_data.get('is_developer')
+        if is_developer:
+            print('is_developer is up ')
+        shift = User.objects.create(**validated_data)
+        return shift
+
+    def update(self, instance, validated_data):
+        instance.save()
+        return instance
+
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:

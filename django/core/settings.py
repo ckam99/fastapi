@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'djangodb',
         'USER': 'django',
         'PASSWORD': 'django',
-        'HOST': 'djangodb',
+        'HOST': 'db',
         'PORT': 3306,
 
     }
@@ -131,3 +131,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+RABBITMQ_BROKER_URL = 'amqp://guest:guest@host.docker.internal:5672/'
