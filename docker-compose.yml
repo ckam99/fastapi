@@ -1,0 +1,44 @@
+version: "3.7"
+
+services:
+
+  django:
+    build: django
+    ports:
+      - 8000:8000
+    volumes:
+      - ./django:/app
+  
+  djangodb:
+    container_name: djangodb
+    image: postgres:12
+    restart: always
+    environment:
+      - POSTGRES_USER=django
+      - POSTGRES_PASSWORD=django
+      - POSTGRES_DB=djangodb
+    volumes:
+      - db-data-django:/var/lib/postgresql/data/
+
+  fastapi:
+    build: fastapi
+    ports:
+      - 3000:3000
+    volumes:
+      - ./fastapi:/app
+
+  fastapidb:
+    container_name: fastapi
+    image: postgres:12
+    restart: always
+    environment:
+      - POSTGRES_USER=fastapi
+      - POSTGRES_PASSWORD=fastapidb
+      - POSTGRES_DB=fastapi
+    volumes:
+      - db-data-fastapi:/var/lib/postgresql/data/
+
+
+volumes:
+  db-data-django:
+  db-data-fastapi:
