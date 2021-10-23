@@ -1,0 +1,10 @@
+.vscode
+.venv
+
+.virtualenv
+.venv
+db.sqlite3
+__pycache__/**
+*.pyc
+*.pyo
+.env
