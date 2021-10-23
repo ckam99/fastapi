@@ -1,0 +1,10 @@
+.virtualenv
+.venv
+db.sqlite3
+database.db
+__pycache__/**
+*.pyc
+*.pyo
+.env
+database.db-shm
+database.db-wal
