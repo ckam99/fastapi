@@ -12,5 +12,77 @@ services:
     ports:
       - "9092:9092"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+  db1:
+    image: postgres:12
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=db1
+    ports:
+      - 5432:5432
+    volumes:
+      - db1-data:/var/lib/postgresql/data/
+  service1:
+    <<: &service1
+      build: service1
+      volumes:
+        - ./service1:/usr/src/app
+      environment:
+        - KAFKA_HOST=kafka
+        - KAFKA_PORT=9092
+        - DB_HOST=db1
+        - DB_PORT=5432
+        - DB_NAME=db1
+        - DB_USER=postgres
+        - DB_PASSWORD=test
+      depends_on:
+        - db1
+        - kafka
+      restart: always
+    command: bash -c "uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    ports:
+      - 8000:8000
+  service1-cunsumer:
+    <<: *service1
+    command: python -u consumer.py
+  
+  db2:
+    image: postgres:12
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=db2
+    ports:
+      - 5433:5432
+    volumes:
+      - db2-data:/var/lib/postgresql/data/
+  service2:
+    <<: &service2
+      build: service2
+      volumes:
+        - ./service2:/usr/src/app
+      environment:
+        - KAFKA_HOST=kafka
+        - KAFKA_PORT=9092
+        - DB_HOST=db2
+        - DB_PORT=5432
+        - DB_NAME=db2
+        - DB_USER=postgres
+        - DB_PASSWORD=test
+      depends_on:
+        - db2
+        - kafka
+      restart: always
+    command: bash -c "uvicorn core:app --reload --host 0.0.0.0 --port 8000"
+    ports:
+      - 8001:8000
+  service2-cunsumer:
+    <<: *service2
+    command: python -u consumer.py
+
+volumes: 
+  db1-data:
+  db2-data:

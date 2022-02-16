@@ -8,6 +8,9 @@ class User(Model):
     email = fields.CharField(max_length=255, unique=True)
     password = fields.CharField(max_length=255, null=True, blank=True)
 
+    class Meta:
+        table = "users"
+
 
 class Post(Model):
     id = fields.IntField(pk=True)

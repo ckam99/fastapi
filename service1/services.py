@@ -1,7 +1,6 @@
 from tortoise.contrib.pydantic import pydantic_model_creator
 from models import Post
 from schemas import Post as PostSchema
-from typing import List
 
 
 class PostAPIView():
@@ -22,4 +21,3 @@ class PostAPIView():
         post = await Post.get(id=user_id)
         await post.delete()
         return post
-
