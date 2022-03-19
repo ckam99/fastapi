@@ -1,19 +1,14 @@
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
 import json
 from repositories.message import MessageRepository
-import os
+from core.settings import KAFKA_HOST, KAFKA_TOPICS, KAFKA_GROUP_ID
 
 
 class Kafka:
 
-    KAFKA_HOST = '{}:{}'.format(os.environ.get(
-        'KAFKA_HOST', 'localhost'), os.environ.get('KAFKA_PORT', '9092'))
-    KAFKA_GROUP_ID = os.environ.get('KAFKA_GROUP_ID', 'fastapi')
-    KAFKA_TOPICS = ['post_created', 'post_deleted', 'post_updated']
-
     @staticmethod
     async def produce(topic: str, data):
-        producer = AIOKafkaProducer(bootstrap_servers=Kafka.KAFKA_HOST)
+        producer = AIOKafkaProducer(bootstrap_servers=KAFKA_HOST)
         # Get cluster layout and initial topic/partition leadership information
         await producer.start()
         try:
@@ -26,9 +21,9 @@ class Kafka:
     @staticmethod
     async def consume():
         consumer = AIOKafkaConsumer(
-            *Kafka.KAFKA_TOPICS,
-            bootstrap_servers=Kafka.KAFKA_HOST,
-            group_id=Kafka.KAFKA_GROUP_ID)
+            *KAFKA_TOPICS,
+            bootstrap_servers=KAFKA_HOST,
+            group_id=KAFKA_GROUP_ID)
         # Get cluster layout and join group `my-group`
         print('consumer started...')
         await consumer.start()
@@ -37,8 +32,8 @@ class Kafka:
             async for msg in consumer:
                 print("consumed: ", msg.topic, msg.partition, msg.offset,
                       msg.key, msg.value, msg.timestamp)
-                if msg.topic == 'post_created':
-                    await MessageRepository.se(msg.value.decode())
-                    print("post created successully!")
+                # if msg.topic == 'message-create':
+                #     await MessageRepository.se(msg.value.decode())
+                #     print("post created successully!")
         finally:
             await consumer.stop()

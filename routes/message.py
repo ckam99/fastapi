@@ -5,7 +5,7 @@ from typing import List
 from tasks.message import message_created
 
 
-router = APIRouter(prefix='/messages')
+router = APIRouter(prefix='/messages', tags=['Messages'])
 
 
 @router.get('/', response_model=List[Message])
