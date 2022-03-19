@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "fastapi-apache-pulsar"
+version = "0.1.0"
+description = ""
+authors = ["Ckam <ckam225@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.74.1"
+uvicorn = "^0.17.5"
+pulsar-client = "^2.9.1"
+tortoise-orm = "^0.18.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+autopep8 = "^1.6.0"
+flake8 = "^4.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

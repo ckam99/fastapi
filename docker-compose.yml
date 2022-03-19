@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  pulsar:
+    image: "apachepulsar/pulsar:2.6.2"
+    command: bin/pulsar standalone
+    environment:
+      PULSAR_MEM: " -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+    volumes:
+      - ./volumes/pulsar/data:/pulsar/data
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    restart: unless-stopped
+
+  pulsar-manager:
+    image: apachepulsar/pulsar-manager:v0.2.0
+    ports:
+      - "9527:9527"
+      - "7750:7750"
+    depends_on:
+      - pulsar
+    environment:
+      SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
+  
+  # db:
+  #   image: postgres:12
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_PASSWORD=test
+  #     - POSTGRES_DB=pulsar
+  #   ports:
+  #     - 5435:5432
+  #   volumes:
+  #     - ./volumes/postgres/data:/var/lib/postgresql/data/
+  # app:
+  #   <<: &app
+  #     build: .
+  #     volumes:
+  #       - ./:/app
+  #     environment:
+  #       - KAFKA_HOST=kafka
+  #       - KAFKA_PORT=9092
+  #       - DB_HOST=db1
+  #       - DB_PORT=5432
+  #       - DB_NAME=db
+  #       - DB_USER=postgres
+  #       - DB_PASSWORD=test
+  #     depends_on:
+  #       - db
+  #       - pulsar
+  #     restart: always
+  #   command: "poetry run uvicorn src.main:app --reload --host 0.0.0.0 --port 8000"
+  #   ports:
+  #     - 8003:8000
+  # cunsumer:
+  #   <<: *app
+  #   command: "poetry run python src/consumer.py"
+
