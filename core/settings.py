@@ -1,4 +1,6 @@
 from starlette.config import Config
+from core.utils import load_models
+
 
 config = Config('.env')
 
@@ -36,10 +38,11 @@ TORTOISE_ORM = {
         "models": {
             "models": [
                 'models.base',
-                'models.users',
-                'models.stores',
-                'models.products',
-                'aerich.models'
+                *load_models()  # import models dynamacally
+                # 'models.users',
+                # 'models.stores',
+                # 'models.products',
+                # 'aerich.models'
             ],
             "default_connection": "default"
         }
@@ -78,6 +81,6 @@ CELERY_BROKER_URL = config(
 CELERY_RESULT_BACKEND = config(
     'CELERY_RESULT_BACKEND', cast=str, default='redis://127.0.0.1:6379')
 CELERY_TASKS_REGISTER = [
-    # ','.join(load_tasks())
+    # ','.join(load_tasks()) # comment out this line to import automatically tasks
     'tasks.users'
 ]

@@ -1,19 +1,21 @@
 
-# from core.mails import send_email_async
-from database.helpers import unique_code
+from core.exceptions import DbConnectionError
 from celery import shared_task
+import asyncio
+from services.users import send_confirm_mail
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task(bind=True)
 def send_confirmation_email(self, email: str):
     try:
-        code = unique_code()
-        body = {
-            'email': email,
-            'code': code
-        }
-        # send_email_async('Confirmation', body=body, to=[
-        #     email], template_name='mail/confirm_email.html')
-        return 'Done!'
-    except Exception:
-        return 'Error sending confirmation email'
+        asyncio.run(send_confirm_mail(email))
+        return 'Confirmation email successfully sent!'
+    except DbConnectionError as ex:
+        return ex
+    except Exception as ex:
+        logger.error(ex)
+        return f"Error Sending confirmation mail to {email}"

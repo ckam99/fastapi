@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from core.settings import TORTOISE_ORM
 import logging
 
+logger = logging.getLogger(__name__)
+
 
 def connect_db(app: FastAPI):
 
@@ -13,8 +15,8 @@ def connect_db(app: FastAPI):
         generate_schemas=False,
         add_exception_handlers=True
     )
-    logging.info('Tortoise-ORM started, %s, %s',
-                 Tortoise._connections, Tortoise.apps)
+    logger.info('Tortoise-ORM started, %s, %s',
+                Tortoise._connections, Tortoise.apps)
 
 
 async def get_database(connection: str = 'default') -> BaseDBAsyncClient:

@@ -20,3 +20,7 @@ class UnAuthorizedError(Exception):
 
 class FileDoesntExistError(Exception):
     pass
+
+
+class DbConnectionError(Exception):
+    pass

@@ -2,30 +2,37 @@ version: '3.8'
 
 services:
 
-  # web:
-  #   build: ./
+  # db:
+  #   image: postgres:12
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_PASSWORD=test
+  #     - POSTGRES_DB=pulsar
   #   ports:
-  #     - 8004:8000
-  #   command: uvicorn main:app --host 0.0.0.0 --reload
+  #     - 5435:5432
   #   volumes:
-  #     - ./:/usr/src/app
-  #   environment:
-  #     - CELERY_BROKER_URL=redis://redis:6379/0
-  #     - CELERY_RESULT_BACKEND=redis://redis:6379/0
-  #   depends_on:
-  #     - redis
+  #     - ./volumes/postgres/data:/var/lib/postgresql/data/
 
-  # worker:
-  #   build: ./
-  #   command: celery worker --app=core.celery --loglevel=info
-  #   volumes:
-  #     - ./:/usr/src/app
-  #   environment:
-  #     - CELERY_BROKER_URL=redis://redis:6379/0
-  #     - CELERY_RESULT_BACKEND=redis://redis:6379/0
-  #   depends_on:
-  #     - web
-  #     - redis
+  web:
+    build: .
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - redis
+    image: fastapi-web
+    ports:
+      - 8004:8000
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --log_level=info --reload
+
+  worker:
+    image: fastapi-web
+    command: celery -A core.celery worker  --loglevel=info
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - web
+      - redis
 
   redis:
     image: redis:alpine

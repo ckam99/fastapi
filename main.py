@@ -10,21 +10,28 @@ from routes.base import router
 from database.base import connect_db
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.staticfiles import StaticFiles
 from core.utils import format_validation_errors
 from core.middlewares import register_cors
+from core.logging import register_logs
+from core.utils import register_signals
 
 app = FastAPI()
+app.mount('/static', StaticFiles(directory='resources/static'),
+          name='static')
+logger = register_logs(app)
 
 
 @app.on_event('startup')
 async def on_start():
-    print('App started ...')
+    logger.info('App started ...')
     register_cors(app)
+    register_signals()
 
 
 @app.on_event('shutdown')
 async def on_shutdown():
-    print('app shut down...')
+    logger.info('app shut down...')
 
 connect_db(app)
 app.include_router(router)

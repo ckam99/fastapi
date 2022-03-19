@@ -53,3 +53,9 @@ async def unique_code(as_token=True):
     if is_exist > 0:
         return await unique_code(as_token)
     return code
+
+
+async def generate_verify_code(email: str, as_token=True):
+    code = await unique_code(as_token)
+    await VerifyCode.create(email=email, code=code)
+    return code
