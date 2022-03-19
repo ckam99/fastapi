@@ -2,7 +2,7 @@
 
 [Demo app](https://github.com/ckam225/fastapi)
 
-[FastAPI ecommerce](https://github.com/ckam225/fastapi-ecommerce.git)
+[FastAPI ecommerce](https://github.com/ckam225/fastapi/tree/fastapi-ecommerce)
 
 [Micro framework based on FastAPI](https://github.com/ckam225/fastapi/tree/microframework)
 
