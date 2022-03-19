@@ -6,4 +6,4 @@ class Message(models.Model):
     message = fields.TextField()
 
     def __str__(self) -> str:
-        return self.title
+        return self.message

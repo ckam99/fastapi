@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 
 
-class BaseMessage(BaseModel):
+class Message(BaseModel):
+    id: int
     message: str
 
 
-class Message(BaseMessage):
-    id: int
+class MessageIn(BaseModel):
+    message: str

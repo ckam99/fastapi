@@ -3,5 +3,5 @@ from schemas.message import Message
 import asyncio
 
 
-def message_created(topic: str, post: Message):
-    asyncio.run(Kafka.produce(topic, Message))
+async def message_created(topic: str, msg: Message):
+    await Kafka.produce(topic, msg.dict())

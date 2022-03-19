@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "fastapi-kafka-2"
+name = "fastapi-apache-kafka"
 version = "0.1.0"
 description = "Kafka demo"
 authors = ["Ckam <ckam225@gmail.com>"]
@@ -11,6 +11,7 @@ fastapi = "^0.75.0"
 uvicorn = "^0.17.6"
 aiokafka = "^0.7.2"
 tortoise-orm = "^0.18.1"
+loguru = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"

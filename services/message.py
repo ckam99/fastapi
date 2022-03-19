@@ -6,7 +6,7 @@ from models.message import Message
 import json
 
 
-async def save_message(payload):
+async def save_message_from_dict(payload):
     data: dict = json.loads(payload)
     async with get_database() as db:
         async with in_transaction() as connection:

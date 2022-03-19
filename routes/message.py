@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, BackgroundTasks, Response
 from repositories.message import MessageRepository
-from schemas.message import Message
+from schemas.message import Message, MessageIn
 from typing import List
 from tasks.message import message_created
 
@@ -14,7 +14,7 @@ async def get_messages(repository: MessageRepository = Depends()):
 
 
 @router.post('/', response_model=Message)
-async def create_message(data: Message, background_tasks: BackgroundTasks,
+async def create_message(data: MessageIn, background_tasks: BackgroundTasks,
                          repository: MessageRepository = Depends()):
     post = await repository.create(data)
     background_tasks.add_task(message_created, 'message_created', post.dict())

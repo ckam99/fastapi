@@ -11,7 +11,7 @@ class MessageRepository():
     async def fetch_all(self):
         return await self.serializer.from_queryset(Message.all())
 
-    async def create(self, credential: schema.Message):
+    async def create(self, credential: schema.MessageIn):
         message = await Message.create(**credential.dict(exclude_unset=True))
         return self.serializer.from_orm(message)
 
