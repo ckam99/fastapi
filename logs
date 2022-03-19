@@ -10121,3 +10121,17 @@ INFO     2022-03-19 21:04:55.227 request id: app - tortoise.contrib.fastapi:init
 INFO     2022-03-19 21:04:55.227 request id: app - uvicorn.lifespan.on:startup - Application startup complete.
 INFO     2022-03-19 21:04:55.227 request id: app - uvicorn.lifespan.on:startup - Application startup complete.
 INFO     2022-03-19 21:04:55.228 request id: app - uvicorn.lifespan.on:startup - Application startup complete.
+INFO     2022-03-19 21:08:54.919 request id: app - uvicorn.server:shutdown - Shutting down
+INFO     2022-03-19 21:08:54.920 request id: app - uvicorn.server:shutdown - Shutting down
+INFO     2022-03-19 21:08:54.921 request id: app - uvicorn.server:shutdown - Shutting down
+INFO     2022-03-19 21:08:55.023 request id: app - uvicorn.lifespan.on:shutdown - Waiting for application shutdown.
+INFO     2022-03-19 21:08:55.023 request id: app - uvicorn.lifespan.on:shutdown - Waiting for application shutdown.
+INFO     2022-03-19 21:08:55.023 request id: app - uvicorn.lifespan.on:shutdown - Waiting for application shutdown.
+INFO     2022-03-19 21:08:55.026 request id: app - tortoise:close_connections - Tortoise-ORM shutdown
+INFO     2022-03-19 21:08:55.026 request id: app - tortoise.contrib.fastapi:close_orm - Tortoise-ORM shutdown
+INFO     2022-03-19 21:08:55.027 request id: app - uvicorn.lifespan.on:shutdown - Application shutdown complete.
+INFO     2022-03-19 21:08:55.027 request id: app - uvicorn.lifespan.on:shutdown - Application shutdown complete.
+INFO     2022-03-19 21:08:55.027 request id: app - uvicorn.lifespan.on:shutdown - Application shutdown complete.
+INFO     2022-03-19 21:08:55.028 request id: app - uvicorn.server:serve - Finished server process [80992]
+INFO     2022-03-19 21:08:55.028 request id: app - uvicorn.server:serve - Finished server process [80992]
+INFO     2022-03-19 21:08:55.029 request id: app - uvicorn.server:serve - Finished server process [80992]
