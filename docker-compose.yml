@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  kafka:
+    build: apache-kafka
+    container_name: kafka
+    ports:
+      - 9092:9092
+      - 2181:2181
+    restart: always
+
+  users-service:
+    <<: &users-service
+      build: users
+      environment:
+        - KAFKA_HOST=kafka:9092
+      volumes:
+        - ./users:/app
+    command: "poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    ports:
+      - 8000:8000
+  users-service-consumer:
+    <<: *users-service
+    command: "poetry run python consumer.py"
+    restart: always
+    depends_on:
+      - kafka
+
+  notify-service:
+    <<: &notify-service
+      build: notifications
+      environment:
+        - KAFKA_HOST=kafka:9092
+      volumes:
+        - ./notifications:/app
+    command: "poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    ports:
+      - 8001:8000
+  notify-service-consumer:
+    <<: *notify-service
+    command: "poetry run python consumer.py"
+    restart: always
+    depends_on:
+      - kafka
+networks:
+  nk-kafka:

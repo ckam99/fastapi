@@ -1,0 +1,5 @@
+# zookeeper 2181
+# command: bin/zookeeper-server-start.sh config/zookeeper.properties 
+
+# kafka 9092
+# bin/kafka-server-start.sh config/server.properties

@@ -1,0 +1,5 @@
+fastapi==0.75.0
+uvicorn==0.17.6
+aiokafka==0.7.2
+tortoise-orm==0.18.1
+loguru==0.6.0
