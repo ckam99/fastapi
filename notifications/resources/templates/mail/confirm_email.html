@@ -1,5 +1,9 @@
 {% extends 'mail/base.html' %}
 
+{% block banner %}
+  <h1>{{ APP_NAME  }}</h1>
+{% endblock %}
+
 {% block content %}
 <div style="padding: 30px 0;">
     Welcome, {{ email }}!<br /><br />

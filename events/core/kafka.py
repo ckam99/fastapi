@@ -1,6 +1,6 @@
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
 import json
-from services import notification
+from services import event
 from core.settings import KAFKA_HOST, KAFKA_TOPICS, KAFKA_GROUP_ID
 
 
@@ -33,8 +33,9 @@ class Kafka:
                 print("consumed: ", msg.topic, msg.partition, msg.offset,
                       msg.key, msg.value, msg.timestamp)
 
-                if msg.topic == 'user-registred':
-                    await notification.confirme_user_account(msg.value.decode())
+                if msg.topic not in ['user-registred']:
+                    await event.save_event_from_source(msg.value.decode(), msg.topic)
+                    print("event created successully!")
 
         finally:
             await consumer.stop()

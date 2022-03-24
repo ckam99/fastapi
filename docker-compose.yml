@@ -42,5 +42,21 @@ services:
     restart: always
     depends_on:
       - kafka
-networks:
-  nk-kafka:
+  
+
+  events-service:
+    <<: &events-service
+      build: events
+      environment:
+        - KAFKA_HOST=kafka:9092
+      volumes:
+        - ./events:/app
+    command: "poetry run uvicorn main:app --reload --host 0.0.0.0 --port 8000"
+    ports:
+      - 8002:8000
+  events-service-consumer:
+    <<: *events-service
+    command: "poetry run python consumer.py"
+    restart: always
+    depends_on:
+      - kafka

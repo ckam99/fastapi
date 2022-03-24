@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
 from core.exceptions import ModelNotfoundError
 from core.database import connect_database
 from core.logging import register_logs
@@ -13,13 +12,10 @@ app = FastAPI(title=APP_NAME)
 
 app.include_router(router)
 
-app.mount('/static', StaticFiles(directory='resources/static'),
-          name='static')
-
 logger = register_logs(app)
 
 
-@app.middleware("http")
+@ app.middleware("http")
 async def exception_handling(request: Request, call_next):
     request.app.logger.info(f"new {request.method} request")
     try:
@@ -29,13 +25,13 @@ async def exception_handling(request: Request, call_next):
                             content={'reason': str(exc)})
 
 
-@app.on_event('startup')
+@ app.on_event('startup')
 async def startup():
     connect_database(app)
     register_signals()
     print('app started...')
 
 
-@app.on_event('shutdown')
+@ app.on_event('shutdown')
 async def shutdown():
     print('app shutdown...')

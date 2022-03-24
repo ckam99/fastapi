@@ -1,15 +1,13 @@
 import os
 from core.helpers import load_models
 
+APP_NAME = 'Notification service'
+
 KAFKA_HOST = os.environ.get('KAFKA_HOST', 'localhost:9092')
 KAFKA_GROUP_ID = os.environ.get('KAFKA_GROUP_ID', None)
 KAFKA_TOPICS = [
-    'notification-created-event',
-    'notification-updated-event',
-    'notification-deleted-event',
-    'user-created-event',
-    'user-updated-event',
-    'user-deleted-event'
+    'user-deleted-event',
+    'user-registred'
 ]
 
 TORTOISE_ORM_CONFIG = {

@@ -10,9 +10,9 @@ class UserSchema(BaseSchema):
     firstname:  Optional[str]
     email: EmailStr
     is_actif: bool
-    # email_confirmed_at: datetime = None
-    # created_at: datetime = None
-    # modified_at: datetime = None
+    email_confirmed_at: datetime = None
+    created_at: datetime = None
+    modified_at: datetime = None
 
 
 class UserInSchema(BaseModel):
@@ -21,12 +21,12 @@ class UserInSchema(BaseModel):
     email: EmailStr
 
 
-class NotificationSchema(BaseModel):
+class NotificationSchema(BaseSchema):
     id: int
     title: str
     source: str
     body: str
     status: str
-    created_at: str
-    updated_at: str
+    created_at: datetime = None
+    updated_at: datetime = None
     user: UserSchema = None

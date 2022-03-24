@@ -1,32 +1,27 @@
-from pydantic import BaseModel, EmailStr
+from schemas.base import BaseSchema, BaseModel
 from typing import Optional
 from datetime import datetime
+from models.notification import NotificationStatus
 
 
-class UserSchema(BaseModel):
-    id: int
-    lastname:  Optional[str]
-    firstname:  Optional[str]
-    email: EmailStr
-    phone: Optional[str]
-    is_actif: bool
-    email_confirmed_at: datetime = None
-    created_at: datetime = None
-    modified_at: datetime = None
-
-
-class NotificationSchema(BaseModel):
+class NotificationSchema(BaseSchema):
     id: int
     title: str
     source: str
-    body: str
-    status: str
-    created_at: str
-    updated_at: str
-    user: UserSchema = None
+    descrition: Optional[str]
+    body: dict = None
+    status: Optional[NotificationStatus]
+    created_at: datetime = None
+    updated_at: datetime = None
+    user_id: int
+
+    # class Config:
+    #     use_enum_values = True
 
 
 class NotificationInSchema(BaseModel):
     title: str
     source: str
-    body: str
+    descrition: Optional[str]
+    body: dict
+    user_id: int

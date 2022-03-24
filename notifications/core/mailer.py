@@ -1,45 +1,39 @@
-from fastapi_mailman.config import ConnectionConfig
-from fastapi_mailman import Mail, EmailMessage, EmailStr
-from core.settings import *
+from typing import Any, Dict, List
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from core import settings
+from pydantic import EmailStr
+# from asgiref.sync import sync_to_async
 
 
-config = ConnectionConfig(
-    MAIL_USERNAME=MAIL_USERNAME,
-    MAIL_PASSWORD=MAIL_PASSWORD,
-    MAIL_BACKEND=MAIL_BACKEND,
-    MAIL_SERVER=MAIL_SERVER,
-    MAIL_PORT=MAIL_PORT,
-    MAIL_DEFAULT_SENDER=MAIL_FROM
+conf = ConnectionConfig(
+    MAIL_USERNAME=settings.MAIL_USERNAME,
+    MAIL_PASSWORD=settings.MAIL_PASSWORD,
+    MAIL_FROM=settings.MAIL_FROM,
+    MAIL_PORT=settings.MAIL_PORT,
+    MAIL_SERVER=settings.MAIL_SERVER,
+    MAIL_FROM_NAME=settings.MAIL_FROM_NAME,
+    MAIL_TLS=settings.MAIL_USE_TLS,
+    MAIL_SSL=settings.MAIL_USE_SSL,
+    USE_CREDENTIALS=settings.MAIL_USE_CREDENTIALS,
+    TEMPLATE_FOLDER='resources/templates',
+    VALIDATE_CERTS=False
 )
-if MAIL_USE_TLS:
-    config.MAIL_USE_TLS = MAIL_USE_TLS
-if MAIL_USE_SSL:
-    config.MAIL_USE_SSL = MAIL_USE_SSL
-
-mail = Mail(config)
 
 
-def mailer(subject: str, body: str, sender: EmailStr, to: list[EmailStr], as_html: bool = True, *args, **kwargs) -> EmailMessage:
-    msg = EmailMessage(
-        mailman=mail,
+async def send_email_async(subject: str, body: Dict[str, Any], to: List[EmailStr], template_name=str, *args, **kwargs):
+    body = body
+    body['APP_NAME'] = settings.APP_NAME
+    message = MessageSchema(
         subject=subject,
-        body=body,
-        from_email=sender,
-        to=to,
-        *args, **kwargs
+        recipients=to,
+        template_body=body,
+        *args,
+        **kwargs
     )
-    if as_html:
-        msg.content_subtype = "html"
-    return msg
+    fm = FastMail(conf)
+    await fm.send_message(message, template_name=template_name)
 
 
-async def send_mail(subject, body, sender: EmailStr, to: list[EmailStr] = [], as_html: bool = True, *args, **kwargs):
-    msg = mailer(subject, body, sender, to,  as_html, *args, **kwargs)
-    return await msg.send()
-
-
-async def push_mail(messages: list[EmailMessage]):
-    async with mail.get_connection() as conn:
-        for m in messages:
-            m.connection = conn
-        await conn.send_messages(messages)
+async def send_push_email(subject: str, body: Dict[str, Any], to: List[EmailStr], template_name=None, *args, **kwargs):
+    for receiver in to:
+        await send_email_async(subject=subject, body=body, to=[receiver], template_name=template_name, *args, **kwargs)

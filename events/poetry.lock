@@ -243,27 +243,6 @@ pydantic = ">=1.8.2,<2.0.0"
 python-multipart = ">=0.0.5,<0.0.6"
 
 [[package]]
-name = "fastapi-mailman"
-version = "0.0.4"
-description = "Porting Django's email implementation to your FastAPI applications."
-category = "main"
-optional = false
-python-versions = ">=3.6.2,<4.0.0"
-
-[package.dependencies]
-aiosmtplib = ">=1.1.6,<2.0.0"
-dnspython = ">=2,<3"
-email-validator = ">=1,<2"
-fastapi = ">=0,<1"
-Jinja2 = ">=3,<4"
-pydantic = ">=1,<2"
-
-[package.extras]
-test = ["black (>=21.5b2,<22.0)", "isort (>=5.8.0,<6.0.0)", "flake8 (>=3.9.2,<4.0.0)", "pytest (>=6.2.4,<7.0.0)", "pytest-cov (>=2.12.0,<3.0.0)", "anyio (>=3.3.2,<4.0.0)", "trio (>=0.19.0,<0.20.0)"]
-dev = ["tox (>=3.20.1,<4.0.0)", "virtualenv (>=20.2.2,<21.0.0)", "pip (>=21.1,<22.0)", "twine (>=3.3.0,<4.0.0)", "pre-commit (>=2.12.0,<3.0.0)", "toml (>=0.10.2,<0.11.0)", "bump2version (>=1.0.1,<2.0.0)"]
-doc = ["mkdocs (>=1.1.2,<2.0.0)", "mkdocs-include-markdown-plugin (>=1.0.0,<2.0.0)", "mkdocs-material (>=6.1.7,<7.0.0)", "mkdocstrings (>=0.15.2,<0.16.0)", "mkdocs-material-extensions (>=1.0.1,<2.0.0)", "mkdocs-autorefs (>=0.2.1,<0.3.0)"]
-
-[[package]]
 name = "flake8"
 version = "4.0.1"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -341,11 +320,11 @@ python-versions = "*"
 
 [[package]]
 name = "jinja2"
-version = "3.0.3"
+version = "3.1.0"
 description = "A very fast and expressive template engine."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 MarkupSafe = ">=2.0"
@@ -470,7 +449,7 @@ six = ">=1.4.0"
 
 [[package]]
 name = "pytz"
-version = "2021.3"
+version = "2022.1"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
@@ -618,7 +597,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "1de32d30452b35eb4236f99b8ab71051768f74b200f5a5729f5f3374226953c3"
+content-hash = "84a01f30d8bc0dd73e828e1bb2b7bd28dad9e34e37b6221734b53c485c9cc06f"
 
 [metadata.files]
 aiokafka = [
@@ -715,10 +694,6 @@ fastapi-mail = [
     {file = "fastapi-mail-1.0.6.tar.gz", hash = "sha256:862b91af9d5e8e43fd5ebfa269f27bedc67e629bdabedeaa46dd1802b391da75"},
     {file = "fastapi_mail-1.0.6-py3-none-any.whl", hash = "sha256:7f864244b9b2aba53f7e1a0faaec7835587f966ba8eb7074e11c54e7fd7ade64"},
 ]
-fastapi-mailman = [
-    {file = "Fastapi-Mailman-0.0.4.tar.gz", hash = "sha256:a610d547b38f12c4546719006ffb9c4a41dd4fa5cccb1de72e0ec1782e91cbce"},
-    {file = "Fastapi_Mailman-0.0.4-py3-none-any.whl", hash = "sha256:04f49af5c0a97f63bb61a53086d97bdecf0ecba6a9aca3e88d5cdb5f6a5b6995"},
-]
 flake8 = [
     {file = "flake8-4.0.1-py2.py3-none-any.whl", hash = "sha256:479b1304f72536a55948cb40a32dce8bb0ffe3501e26eaf292c7e60eb5e0428d"},
     {file = "flake8-4.0.1.tar.gz", hash = "sha256:806e034dda44114815e23c16ef92f95c91e4c71100ff52813adf7132a6ad870d"},
@@ -744,8 +719,8 @@ iso8601 = [
     {file = "iso8601-0.1.16.tar.gz", hash = "sha256:36532f77cc800594e8f16641edae7f1baf7932f05d8e508545b95fc53c6dc85b"},
 ]
 jinja2 = [
-    {file = "Jinja2-3.0.3-py3-none-any.whl", hash = "sha256:077ce6014f7b40d03b47d1f1ca4b0fc8328a692bd284016f806ed0eaca390ad8"},
-    {file = "Jinja2-3.0.3.tar.gz", hash = "sha256:611bb273cd68f3b993fabdc4064fc858c5b47a973cb5aa7999ec1ba405c87cd7"},
+    {file = "Jinja2-3.1.0-py3-none-any.whl", hash = "sha256:da424924c069a4013730d8dd010cbecac7e7bb752be388db3741688bffb48dc6"},
+    {file = "Jinja2-3.1.0.tar.gz", hash = "sha256:a2f09a92f358b96b5f6ca6ecb4502669c4acb55d8733bbb2b2c9c4af5564c605"},
 ]
 kafka-python = [
     {file = "kafka-python-2.0.2.tar.gz", hash = "sha256:04dfe7fea2b63726cd6f3e79a2d86e709d608d74406638c5da33a01d45a9d7e3"},
@@ -862,8 +837,8 @@ python-multipart = [
     {file = "python-multipart-0.0.5.tar.gz", hash = "sha256:f7bb5f611fc600d15fa47b3974c8aa16e93724513b49b5f95c81e6624c83fa43"},
 ]
 pytz = [
-    {file = "pytz-2021.3-py2.py3-none-any.whl", hash = "sha256:3672058bc3453457b622aab7a1c3bfd5ab0bdae451512f6cf25f64ed37f5b87c"},
-    {file = "pytz-2021.3.tar.gz", hash = "sha256:acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326"},
+    {file = "pytz-2022.1-py2.py3-none-any.whl", hash = "sha256:e68985985296d9a66a881eb3193b0906246245294a881e7c8afe623866ac6a5c"},
+    {file = "pytz-2022.1.tar.gz", hash = "sha256:1e760e2fe6a8163bc0b3d9a19c4f84342afa0a2affebfaa84b01b978a02ecaa7"},
 ]
 redis = [
     {file = "redis-4.1.4-py3-none-any.whl", hash = "sha256:04629f8e42be942c4f7d1812f2094568f04c612865ad19ad3ace3005da70631a"},

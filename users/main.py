@@ -4,10 +4,11 @@ from core.exceptions import ModelNotfoundError
 from core.database import connect_database
 from core.logging import register_logs
 from core.helpers import register_signals
+from core.settings import APP_NAME
 from routes.base import router
 
 
-app = FastAPI()
+app = FastAPI(title=APP_NAME)
 
 app.include_router(router)
 
