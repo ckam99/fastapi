@@ -16,7 +16,7 @@
 
 [Event Stream in Djando and FastAPI using Rabbitmq](https://github.com/ckam225/fastapi/tree/event-streaming-django-fastapi)
 
-[Event Stream with Apache Kafka](https://github.com/ckam225/fastapi/tree/fastapi-apache-kafka)
+[Event Sourcing with Apache Kafka microservices](https://github.com/ckam225/fastapi/tree/fastapi-apache-kafka)
 
 [Event Stream with Apache Kafka microservices](https://github.com/ckam225/fastapi/tree/fastapi-apache-kafka-microservices)
 
