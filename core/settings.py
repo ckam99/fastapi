@@ -70,9 +70,10 @@ MAIL_FROM = config('MAIL_FROM', cast=str, default='noreply@example.com')
 MAIL_PORT = config('MAIL_PORT', cast=int, default=2525)
 MAIL_SERVER = config('MAIL_SERVER', cast=str, default='smtp.mailtrap.io')
 MAIL_FROM_NAME = config('MAIL_FROM_NAME', cast=str, default='FastAPI')
-MAIL_TLS = config('MAIL_TLS', cast=bool, default=False)
-MAIL_SSL = config('MAIL_SSL', cast=bool, default=False)
-USE_CREDENTIALS = config('USE_CREDENTIALS', cast=bool, default=False)
+MAIL_USE_TLS = config('MAIL_USE_TLS', cast=bool, default=False)
+MAIL_USE_SSL = config('MAIL_USE_SSL', cast=bool, default=False)
+MAIL_USE_CREDENTIALS = config('MAIL_USE_CREDENTIALS', cast=bool, default=False)
+MAIL_VALIDATE_CERTS = config('MAIL_USE_CREDENTIALS', cast=bool, default=False)
 
 
 # Celery and redis settings

@@ -12,9 +12,10 @@ conf = ConnectionConfig(
     MAIL_PORT=settings.MAIL_PORT,
     MAIL_SERVER=settings.MAIL_SERVER,
     MAIL_FROM_NAME=settings.MAIL_FROM_NAME,
-    MAIL_TLS=settings.MAIL_TLS,
-    MAIL_SSL=settings.MAIL_SSL,
-    USE_CREDENTIALS=settings.USE_CREDENTIALS,
+    MAIL_TLS=settings.MAIL_USE_TLS,
+    MAIL_SSL=settings.MAIL_USE_SSL,
+    USE_CREDENTIALS=settings.MAIL_USE_CREDENTIALS,
+    VALIDATE_CERTS=settings.MAIL_VALIDATE_CERTS,
     TEMPLATE_FOLDER='resources/templates'
 )
 
